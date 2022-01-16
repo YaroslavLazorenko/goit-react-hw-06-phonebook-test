@@ -1,16 +1,18 @@
 import { useState } from 'react';
 import { PropTypes } from 'prop-types';
+import { connect } from 'react-redux';
+import * as actions from '../../redux/phonebook/phonebook-actions';
 import s from './ContactForm.module.css';
 
-const INITIAL_FORM_STATE = { name: '', number: '' };
+const INITIAL_FORM_LOCALE_STATE = { name: '', number: '' };
 
-const ContactForm = ({ addContact }) => {
+const ContactForm = ({ addContact, contacts }) => {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
 
   const resetForm = () => {
-    setName(INITIAL_FORM_STATE.name);
-    setNumber(INITIAL_FORM_STATE.number);
+    setName(INITIAL_FORM_LOCALE_STATE.name);
+    setNumber(INITIAL_FORM_LOCALE_STATE.number);
   };
 
   const handleChange = ({ target }) => {
@@ -30,6 +32,15 @@ const ContactForm = ({ addContact }) => {
 
   const handleSubmit = e => {
     e.preventDefault();
+
+    const isContactAlreadySaved = contacts.find(
+      contact => contact.name.toLowerCase() === name.toLowerCase(),
+    );
+
+    if (isContactAlreadySaved) {
+      alert(`${name} is already in contacts.`);
+      return;
+    }
 
     addContact(name, number);
     resetForm();
@@ -77,4 +88,12 @@ const ContactForm = ({ addContact }) => {
 
 ContactForm.propTypes = { addContact: PropTypes.func.isRequired };
 
-export default ContactForm;
+const mapStateToProps = state => ({ contacts: state.contacts.items });
+
+const mapDispatchToProps = dispatch => {
+  return {
+    addContact: (name, number) => dispatch(actions.addContact(name, number)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ContactForm);

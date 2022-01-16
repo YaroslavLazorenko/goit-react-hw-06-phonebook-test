@@ -1,4 +1,6 @@
 import { PropTypes } from 'prop-types';
+import { connect } from 'react-redux';
+import * as actions from '../../redux/phonebook/phonebook-actions';
 import s from './ContactItem.module.css';
 
 const ContactItem = ({ contact, deleteContact }) => {
@@ -23,4 +25,8 @@ ContactItem.propTypes = {
   deleteContact: PropTypes.func.isRequired,
 };
 
-export default ContactItem;
+const mapDispatchToProps = dispatch => ({
+  deleteContact: id => dispatch(actions.deleteContact(id)),
+});
+
+export default connect(null, mapDispatchToProps)(ContactItem);
