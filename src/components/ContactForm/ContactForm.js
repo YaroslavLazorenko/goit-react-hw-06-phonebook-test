@@ -4,15 +4,15 @@ import { connect } from 'react-redux';
 import * as actions from '../../redux/phonebook/phonebook-actions';
 import s from './ContactForm.module.css';
 
-const INITIAL_FORM_LOCALE_STATE = { name: '', number: '' };
+const INITIAL_FORM_LOCAL_STATE = { name: '', number: '' };
 
 const ContactForm = ({ addContact, contacts }) => {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
 
   const resetForm = () => {
-    setName(INITIAL_FORM_LOCALE_STATE.name);
-    setNumber(INITIAL_FORM_LOCALE_STATE.number);
+    setName(INITIAL_FORM_LOCAL_STATE.name);
+    setNumber(INITIAL_FORM_LOCAL_STATE.number);
   };
 
   const handleChange = ({ target }) => {
@@ -86,7 +86,10 @@ const ContactForm = ({ addContact, contacts }) => {
   );
 };
 
-ContactForm.propTypes = { addContact: PropTypes.func.isRequired };
+ContactForm.propTypes = {
+  addContact: PropTypes.func.isRequired,
+  contacts: PropTypes.array.isRequired,
+};
 
 const mapStateToProps = state => ({ contacts: state.contacts.items });
 
